@@ -1,4 +1,28 @@
 #!/usr/bin/env python
+Import('env')
+
+env_drivers = env.Clone()
+
+env.drivers_sources=[]
+#env.add_source_files(env.drivers_sources,"*.cpp")
+env_drivers.Append(CPPPATH=["vorbis"])
+
+Export('env_drivers')
+
+SConscript('unix/SCsub');
+SConscript('alsa/SCsub');
+SConscript('pulseaudio/SCsub');
+SConscript('windows/SCsub');
+SConscript('gles2/SCsub');
+SConscript('gl_context/SCsub');
+SConscript('pnm/SCsub');
+SConscript('3ds/SCsub');
+
+if (env['openssl']!='no'):
+	env_drivers.Append(CPPFLAGS=['-DOPENSSL_ENABLED']);
+	if (env['openssl']=="builtin"):
+		env_drivers.Append(CPPPATH=['#drivers/builtin_openssl2'])
+		SConscript("builtin_openssl2/SCsub");
 
 Import('env')
 
